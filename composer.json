@@ -8,8 +8,20 @@
             "email": "cuongthinhtuan2006@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "erusev/parsedown": "^1.7"
+    },
     "require-dev": {
         "orchestra/testbench": "^5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "lucifer\\Press\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "lucifer\\Press\\Tests\\": "tests/"
+        }
     }
 }
