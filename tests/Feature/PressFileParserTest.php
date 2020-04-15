@@ -2,6 +2,7 @@
 
 namespace lucifer\Press\Tests;
 
+use Carbon\Carbon;
 use lucifer\Press\PressFileParser;
 use Orchestra\Testbench\TestCase;
 
@@ -16,6 +17,17 @@ class PressFileParserTest extends TestCase
 
         $this->assertStringContainsString('title: Title here', $data[1]);
         $this->assertStringContainsString('description: Description here', $data[1]);
+        $this->assertStringContainsString('Blog post body here', $data[2]);
+    }
+
+    /** @test */
+    public function a_string_can_also_be_used_instead()
+    {
+        $pressFileParser = new PressFileParser("---\ntitle: Title here\n---\nBlog post body here");
+
+        $data = $pressFileParser->getData();
+
+        $this->assertStringContainsString('title: Title here', $data[1]);
         $this->assertStringContainsString('Blog post body here', $data[2]);
     }
 
@@ -37,6 +49,17 @@ class PressFileParserTest extends TestCase
 
         $data = $pressFileParser->getData();
 
-        $this->assertStringContainsString("# Heading\n\nBlog post body here", $data['body']);
+        $this->assertEquals("<h1>Heading</h1>\n<p>Blog post body here</p>", $data['body']);
+    }
+
+    /** @test */
+    public function a_date_field_gets_parsed()
+    {
+        $pressFileParser = new PressFileParser("---\ndate: Apr 15, 2020\n---\n");
+
+        $data = $pressFileParser->getData();
+
+        $this->assertInstanceOf(Carbon::class, $data['date']);
+        $this->assertEquals('04/15/2020', $data['date']->format('m/d/Y'));
     }
 }
