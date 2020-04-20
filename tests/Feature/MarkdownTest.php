@@ -3,7 +3,6 @@
 namespace lucifer\Press\Tests;
 
 use lucifer\Press\MarkdownParser;
-use Orchestra\Testbench\TestCase;
 
 class MarkdownTest extends TestCase
 {

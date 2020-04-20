@@ -4,7 +4,6 @@ namespace lucifer\Press\Tests;
 
 use Carbon\Carbon;
 use lucifer\Press\PressFileParser;
-use Orchestra\Testbench\TestCase;
 
 class PressFileParserTest extends TestCase
 {
