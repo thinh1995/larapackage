@@ -4,12 +4,11 @@
 namespace lucifer\Press\Console;
 
 
+use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use lucifer\Press\Post;
 use lucifer\Press\Press;
-use lucifer\Press\PressFileParser;
 
 class ProcessCommand extends Command
 {
@@ -23,16 +22,21 @@ class ProcessCommand extends Command
             return $this->warn('Please publish the config file by running '.'\'php artisan vendor:publish --tag=press-config\'');
         }
 
-        $posts = Press::driver()->fetchPosts();
+        try {
+            $posts = Press::driver()->fetchPosts();
 
-        foreach ($posts as $post) {
-            Post::create([
-                'identifier' => Str::random(),
-                'slug' => Str::slug($post['title']),
-                'title' => $post['title'],
-                'body' => $post['body'],
-                'extra' => $post['extra'] ?? '',
-            ]);
+            foreach ($posts as $post) {
+                Post::create([
+                    'identifier' => $post['identifier'],
+                    'slug' => Str::slug($post['title']),
+                    'title' => $post['title'],
+                    'body' => $post['body'],
+                    'extra' => $post['extra'] ?? '',
+                ]);
+            }
+        } catch (Exception $e) {
+            $this->error($e->getMessage());
         }
+
     }
 }
