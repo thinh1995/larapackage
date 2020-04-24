@@ -23,5 +23,12 @@
         "psr-4": {
             "lucifer\\Press\\Tests\\": "tests/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "lucifer\\Press\\PressBaseServiceProvider"
+            ]
+        }
     }
 }
