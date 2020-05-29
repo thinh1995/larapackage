@@ -2,9 +2,9 @@
 
 namespace lucifer\Press;
 
-use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use ReflectionClass;
 
 class PressFileParser
 {
@@ -57,7 +57,7 @@ class PressFileParser
     protected function processFields()
     {
         foreach ($this->data as $field => $value) {
-            $class = 'lucifer\\Press\\Fields\\' . Str::title($field);
+            $class = $this->getField(Str::title($field));
 
             if (!class_exists($class) && !method_exists($class, 'process')) {
                 $class = 'lucifer\\Press\\Fields\\Extra';
@@ -67,6 +67,17 @@ class PressFileParser
                 $this->data, 
                 $class::process($field, $value, $this->data)
             );
+        }
+    }
+
+    private function getField($field)
+    {
+        foreach (\lucifer\Press\Facades\Press::availableFields() as $availableField) {
+            $class = new ReflectionClass($availableField);
+
+            if ($class->getShortName() == $field) {
+                return $class->getName();
+            }
         }
     }
 }

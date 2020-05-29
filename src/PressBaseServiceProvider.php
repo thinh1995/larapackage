@@ -36,6 +36,7 @@ class PressBaseServiceProvider extends ServiceProvider
 
         $this->registerFacades();
         $this->registerRoutes();
+        $this->registerFields();
     }
 
     private function registerPublishing()
@@ -64,5 +65,16 @@ class PressBaseServiceProvider extends ServiceProvider
         $this->app->singleton('Press', function($app) {
             return new \lucifer\Press\Press();
         });
+    }
+
+    private function registerFields()
+    {
+        Press::fields([
+            Fields\Title::class,
+            Fields\Body::class,
+            Fields\Date::class,
+            Fields\Description::class,
+            Fields\Extra::class,
+        ]);
     }
 }
